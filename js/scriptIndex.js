@@ -1,41 +1,15 @@
-let intervalId;
-function refreshToken(){
-	fetch('http://localhost:3000/auth/refreshtoken',{
-		method: 'GET',
-		headers: {
-			'content-type': 'application/json',
-			'authorization': 'Bearer ' + sessionStorage.getItem('token')
-		},
-	})
-	.then(response =>{
-		if(response.status !== 200){
-			throw new Error();
-		}
-		return response.json()
-	}).then((result)=>{
-		sessionStorage.setItem('token', result.token)
-	}).catch(err =>{
-		clearInterval(intervalId)
-		window.location.href = 'login.html'	;
-		sessionStorage.clear();
-	})
-}
-refreshToken();
-intervalId = setInterval(()=>{
-	refreshToken()
-},200000)
-
-const  itemBox = document.querySelectorAll('.namePerfume'); 
+const  itemBox = document.querySelectorAll('.nameparf'); 
 const  cartCont = document.getElementById('cart_content'); 
+
 
 function getCartData(){
 	return JSON.parse(localStorage.getItem('cart'));
 };
-
 function setCartData(o){
 	localStorage.setItem('cart', JSON.stringify(o));
 	return false;
 };
+
 
 function addToCart(e){
 	this.disabled = true; 
@@ -44,7 +18,7 @@ function addToCart(e){
 	var itemId = this.getAttribute('data-id');
 	  
 	var itemName = parentBox.querySelector('.name').innerHTML; 
-    var itemUser = parentBox.querySelector('.cost').innerHTML;
+    var itemUser = parentBox.querySelector('.p0').innerHTML;
 	if(cartData.hasOwnProperty(itemId)){ 
 		cartData[itemId][2] += 1;
 	} else { 
@@ -95,7 +69,9 @@ clear.addEventListener('click', (e) => {
     localStorage.removeItem('cart');
 	cartCont.innerHTML = '';
 })
-    
+
+
+       
 function addEvent(elem, type, handler){
   if(elem.addEventListener){
     elem.addEventListener(type, handler, false);

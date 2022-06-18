@@ -1,26 +1,22 @@
+import {checkingInputs} from "./checkInputs.js";
 import Fetch from "../services/Fetch.js";
-const button = document.querySelector('button')
-import {checkingInputs,form,email,password,inputs} from "./register.js";
+import { getInputsValue } from "./inputsValue.js";
+const form = document.getElementById('form1');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const inputs = document.querySelectorAll('input');
+const button = document.querySelector('#button');
 
 form.addEventListener('submit', (e) =>{
     e.preventDefault();
+    console.log("login");
     const emailValue = email.value;
     const passwordValue = password.value;
     checkingInputs.checkEmail(emailValue);
     checkingInputs.checkPassword(passwordValue);
 })
 
-const userModel = {
-    email: '',
-    password: '',
-};
-
-inputs.forEach(item => {
-    item.addEventListener('input', (e) =>{
-        const key = e.target.getAttribute('name');
-        userModel[key] = e.target.value
-    })
-});
+let userModel=getInputsValue(inputs)
 
 button.addEventListener('click',() =>{
     fetch('http://localhost:3000/auth/signin',{
@@ -31,12 +27,9 @@ button.addEventListener('click',() =>{
         body:JSON.stringify(userModel)
     })
     .then((response) => {
-        if(response.status === 200 && response.ok){
-            return response.json()
-      }
+         return response.json()
      }).then(({token}) => {
         Fetch.token = token
-        sessionStorage.setItem('token', token)
         window.location.href = 'index.html'
      })
 })
